@@ -23,7 +23,7 @@
                         <th scope="col">Album</th>
                         <th scope="col">Autor</th>
                         <th scope="col">Género</th>
-                        <th scope="col">Preview</th>
+                        <th scope="col">Contenido</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -42,22 +42,21 @@
                         <td>{{ cancion.genero.nombre }}</td>
                         <td>
                             {% if cancion.preview %}
-                               
-                               <a href="{{ cancion.preview.url }}" download>Descargar archivo</a>
-                               {% if cancion.preview.url|slice:"-5:" == ".3gpp" or cancion.preview.url|slice:"-4:" == ".mp3" or cancion.preview.url|slice:"-4:" == ".wav" %}
-                                
-                                <audio controls>
-                                <source src="{{ cancion.preview.url }}" type="audio/mpeg">
+                                {% if cancion.preview.url|slice:"-5:" == ".3gpp" or cancion.preview.url|slice:"-4:" == ".mp3" or cancion.preview.url|slice:"-4:" == ".wav" %}
+                                    <audio controls>
+                                    <source src="{{ cancion.preview.url }}" type="audio/mpeg">
                 Tu navegador no soporta la reproducción de audio.
-                                </audio>
-                              {% elif cancion.preview.url|slice:"-4:" == ".mp4" or cancion.preview.url|slice:"-5:" == ".webm" or cancion.preview.url|slice:"-4:" == ".ogg" %}
-                                print("Hola soy un prev tipo video")
-                                <video controls>
-                                <source src="{{ cancion.preview.url }}" type="video/mp4">
+                                    </audio>
+                                {% elif cancion.preview.url|slice:"-4:" == ".mp4" or cancion.preview.url|slice:"-5:" == ".webm" or cancion.preview.url|slice:"-4:" == ".ogg" %}
+
+                                    <video controls>
+                                    <source src="{{ cancion.preview.url }}" type="video/mp4">
                 Tu navegador no soporta la reproducción de video.
-                                </video>
-                             
-                              {% endif %}
+                                    </video>
+                                {% endif %}
+                                <br>
+                                <a href="{{ cancion.preview.url }}" download>Descargar archivo</a>
+                                
                             {% endif %}
                             
                         </td>
