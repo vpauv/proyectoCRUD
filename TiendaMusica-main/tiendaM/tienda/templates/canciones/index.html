@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block titulo %} Lista de Canciones {% endblock %}
+
+{% block contenido %}
+
+
+
+
+<div class="card">
+    <div class="card-header">
+        <a name="" id="" class="btn btn-success" href="{% url 'crear' %}" role="button">Agregar nueva canción</a>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Canciones</h4>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Portada</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Autor</th>
+                        <th scope="col">Género</th>
+                        <th scope="col">Preview</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cancion in canciones %}
+                    <tr>
+                        <td>{{ cancion.id }}</td>
+                        <td>{{ cancion.titulo }}</td>
+                        
+                        <td>
+                            <img src="{{ cancion.portada.url }}" height="100" />
+                        </td>
+
+                        <td>{{ cancion.album }}</td>
+                        <td>{{ cancion.autor.nombre }}</td>
+                        <td>{{ cancion.genero.nombre }}</td>
+                        <td>
+                            {% if cancion.preview %}
+                               
+                               <a href="{{ cancion.preview.url }}" download>Descargar archivo</a>
+                               {% if cancion.preview.url|slice:"-5:" == ".3gpp" or cancion.preview.url|slice:"-4:" == ".mp3" or cancion.preview.url|slice:"-4:" == ".wav" %}
+                                
+                                <audio controls>
+                                <source src="{{ cancion.preview.url }}" type="audio/mpeg">
+                Tu navegador no soporta la reproducción de audio.
+                                </audio>
+                              {% elif cancion.preview.url|slice:"-4:" == ".mp4" or cancion.preview.url|slice:"-5:" == ".webm" or cancion.preview.url|slice:"-4:" == ".ogg" %}
+                                print("Hola soy un prev tipo video")
+                                <video controls>
+                                <source src="{{ cancion.preview.url }}" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+                                </video>
+                             
+                              {% endif %}
+                            {% endif %}
+                            
+                        </td>
+                        <td>
+                            <a name="" id="" class="btn btn-info" href="{% url 'editar' cancion.id %}" role="button">Editar</a> 
+                            <a name="" id="" class="btn btn-danger" href="{% url 'eliminar' cancion.id %}" role="button">Borrar</a> 
+                        </td>
+                    </tr>
+                    {% endfor %}
+                
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <div class="card-footer text-muted">
+        Gracias por su preferencia :)
+    </div>
+</div>
+
+{% endblock %}

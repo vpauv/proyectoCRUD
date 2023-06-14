@@ -1,0 +1,104 @@
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  {% for campo in formulario %}
+    <div class="mb-3">
+      <label for="" class="form-label">{{ campo.label }}:</label>
+      {% if campo.field.widget.input_type == 'file' and campo.value %}
+      <br>
+      <img src="{{ MEDIA_URL}}/imagenes/{{ campo.value }}" width="100" alt="" srcset="">
+      {% endif %}
+
+      {% if campo.field.widget.input_type == 'file' and campo.value %}
+      <br>
+        {% if campo.value|stringformat:".3gpp" or campo.value|stringformat:".mp3" or campo.value|stringformat:".wav" %}
+          <audio controls>
+          <source src="{{ MEDIA_URL }}/audios/{{ campo.value }}" type="audio/mpeg">
+            Tu navegador no soporta la reproducción de audio.
+          </audio>
+        {% elif campo.value|stringformat:".mp4" or campo.value|stringformat:".webm" or campo.value|stringformat:".ogg" %}
+          <video controls>
+            <source src="{{ MEDIA_URL }}/audios/{{ campo.value }}" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+          </video>
+          {% elif campo.field.widget.input_type == 'file' and campo.value %}
+            <br>
+            <a href="{{ MEDIA_URL }}/audios/{{ campo.value }}" download>{{ campo.value }}</a>
+        {% endif %}
+      {% endif %}
+
+      {% if campo.label == 'Autor' %}
+      <br>
+      <input 
+            type="{{ campo.field.widget.input_type }}"
+            class="form-control" 
+            name="{{ campo.name }}" 
+            id="inputAutores" 
+            placeholder="{{ campo.label }}"   
+            value="{{ campo.value | default:'' }}" 
+          />
+      <select id="opcionesAutores">
+      {% for autor in autores %}
+        <option value="{{ autor.nombre }}" data-id="{{ autor.idAutor }}">{{ autor.nombre }}</option>
+      {% endfor %}
+      </select>
+
+      {% else %}
+        {% if campo.label == 'Genero' %}
+        <br>
+        <input 
+            type="{{ campo.field.widget.input_type }}"
+            class="form-control" 
+            name="{{ campo.name }}" 
+            id="inputGeneros" 
+            placeholder="{{ campo.label }}" 
+            value="{{ campo.value | default:'' }}" 
+            
+          />
+        <select id="opcionesGeneros">
+        {% for genero in generos %}
+          <option value="{{ genero.nombre }}" data-id="{{ genero.idGen }}">{{ genero.nombre }}</option>
+        {% endfor %}
+        </select>	
+
+        {% else %}
+          <input 
+            type="{{ campo.field.widget.input_type }}"
+            class="form-control" 
+            name="{{ campo.name }}" 
+            id="" 
+            aria-describedby="helpId" 
+            placeholder="{{ campo.label }}"
+            value="{{ campo.value | default:'' }}"
+          />
+        {% endif %}
+      {% endif %}
+      
+    </div>
+    <div class="col-12 help-text">{{ campo.errors }}</div>
+    {% endfor %}
+    
+    <input name="" id="" class="btn btn-success" type="submit" value="Enviar">
+      <a name="" id="" class="btn btn-primary" href="{% url 'canciones' %}" role="button">Cancelar</a>
+</form>
+
+<script>
+  var opciones = document.querySelectorAll("#opcionesAutores option");
+  var campoInput = document.getElementById("inputAutores");
+
+  for (var i = 0; i < opciones.length; i++) {
+    opciones[i].addEventListener("click", function() {
+      var valorId = this.getAttribute("data-id");
+      campoInput.value = valorId;
+    });
+  }
+
+  var opciones2 = document.querySelectorAll("#opcionesGeneros option");
+  var campoInput2 = document.getElementById("inputGeneros");
+  for (var j = 0; j < opciones2.length; j++) {
+    opciones2[j].addEventListener("click", function() {
+      var valorId2 = this.getAttribute("data-id");
+      campoInput2.value = valorId2;
+    });
+  }
+
+</script>
